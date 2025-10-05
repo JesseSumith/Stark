@@ -42,6 +42,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
-  #   - assets/lottie/onboarding.json
+  assets:
+    - assets/lottie/onboarding.json
   #   - assets/mock_data/products.json
