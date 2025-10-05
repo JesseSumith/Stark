@@ -1,0 +1,47 @@
+name: market_advisor
+description: Market Prices Repository & Advisory (Flutter MVP)
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  provider: ^6.0.5
+
+  # HTTP (for future REST integration)
+  http: ^1.5.0
+
+  # Maps (OpenStreetMap)
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.0
+
+  # Local storage (simple, used for later)
+  shared_preferences: ^2.0.18
+
+  # Lottie animations
+  lottie: ^3.3.2
+
+  # In-app overlay banners
+  overlay_support: ^2.1.0
+
+  # Connectivity check
+  connectivity_plus: ^7.0.0
+
+  # Icons and material
+  cupertino_icons: ^1.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # assets:
+  #   - assets/lottie/onboarding.json
+  #   - assets/mock_data/products.json
