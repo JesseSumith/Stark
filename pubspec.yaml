@@ -6,6 +6,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -34,6 +35,10 @@ dependencies:
   # Icons and material
   cupertino_icons: ^1.0.5
 
+  carousel_slider: ^4.2.0
+  shimmer: ^2.0.0
+  flutter_animate: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -44,4 +49,5 @@ flutter:
 
   assets:
     - assets/lottie/onboarding.json
+    - assets/mock_data/
   #   - assets/mock_data/products.json

@@ -1,31 +1,75 @@
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
-import '../screens/product_detail_screen.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCardCompact extends StatelessWidget {
   final Product product;
-  const ProductCard({super.key, required this.product});
+  final VoidCallback? onTap;
+
+  const ProductCardCompact({
+    super.key,
+    required this.product,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(product.imageUrl,
-              width: 64, height: 64, fit: BoxFit.cover),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        title: Text(
-            '${product.name} • ${product.price.toStringAsFixed(0)} ${product.unit}'),
-        subtitle: Text('Trend: ${product.trend} • ${product.category}'),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => ProductDetailScreen(product: product)));
-        },
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // prevent full vertical expansion
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Fixed-height image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 80, // constrain image height
+                  width: double.infinity,
+                  child: Image.network(
+                    product.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        Container(color: Colors.grey.shade300),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // Name wraps or truncates
+              Flexible(
+                child: Text(
+                  product.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              // Price
+              Text(
+                '${product.price.toStringAsFixed(1)} ₹/kg',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade700,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
