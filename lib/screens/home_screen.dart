@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:market_advisor/mock_data.dart';
 import 'package:provider/provider.dart';
 import '../models/product_model.dart';
-import '../services/mock_data.dart';
 import '../widgets/auto_carousel.dart';
 import '../widgets/product_card.dart';
 import '../providers/locale_provider.dart';
@@ -188,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             runSpacing: 8,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.65,
+                                width: MediaQuery.of(context).size.width * 0.9,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -231,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     en: 'Get Advisory',
                                     te: 'సలహా పొందండి',
                                   ),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                             ],

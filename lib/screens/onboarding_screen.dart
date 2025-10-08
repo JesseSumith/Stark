@@ -49,16 +49,49 @@ class OnboardingScreen extends StatelessWidget {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              child: const Text('Get Started'),
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (_) => const MainScreen()));
-              },
-            ),
-          )
+         Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF6D4C41),
+      // 1. Increased the height slightly for a bigger button
+      minimumSize: const Size.fromHeight(52),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    onPressed: () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainScreen()),
+      );
+    },
+    // 2. Replaced the Text widget with a Stack for the stroke effect
+    child: Stack(
+      children: <Widget>[
+        // Background text creates the stroke
+        Text(
+          'Get Started',
+          style: TextStyle(
+            fontSize: 16,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 1.5 // Adjust stroke thickness here
+              ..color = Colors.black.withOpacity(0.6), // Stroke color
+          ),
+        ),
+        // Foreground text is the main fill
+        const Text(
+          'Get Started',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.white, // Main text color
+          ),
+        ),
+      ],
+    ),
+  ),
+),
         ]),
       ),
     );

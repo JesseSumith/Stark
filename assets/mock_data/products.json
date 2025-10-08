@@ -1,14 +1,15 @@
 [
     {
-        "id": 1,
-        "name": "Cashew",
-        "unit": "kg",
-        "price": 125.0,
-        "trend": "up",
-        "category": "Nuts",
-        "imageUrl": "https://cdn-icons-png.flaticon.com/512/7648/7648128.png",
-        "markets": []
-    },
+    "id": 1,
+    "name": "Cashew",
+    "unit": "kg",
+    "price": 125.0,
+    "trend": "up",
+    "category": "Nuts",
+    "imageUrl": "https://i.postimg.cc/RCjf6D73/raw-cashews-nuts-bag-dark-background.jpg",
+    "markets": []
+},
+
     {
         "id": 2,
         "name": "Jackfruit",
