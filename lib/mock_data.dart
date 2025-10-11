@@ -13,7 +13,7 @@ class MockData {
         "price": 125.0,
         "trend": "up",
         "category": "Nuts",
-        "imageUrl": "https://cdn-icons-png.flaticon.com/512/7648/7648128.png",
+        "imageUrl": "https://pngimg.com/uploads/cashew/cashew_PNG44.png",
         "markets": []
       },
       {
@@ -23,7 +23,7 @@ class MockData {
         "price": 40.0,
         "trend": "down",
         "category": "Fruits",
-        "imageUrl": "https://cdn-icons-png.flaticon.com/512/415/415682.png",
+        "imageUrl": "https://pngfre.com/wp-content/uploads/Jackfruit-23.png",
         "markets": []
       },
       {
@@ -33,7 +33,8 @@ class MockData {
         "price": 90.0,
         "trend": "up",
         "category": "Spices",
-        "imageUrl": "https://cdn-icons-png.flaticon.com/512/4139/4139772.png",
+        "imageUrl":
+            "https://bigdeals.lk/uploads/product/normal/bdlpktm08n1.png",
         "markets": []
       },
       {
@@ -43,7 +44,8 @@ class MockData {
         "price": 52.0,
         "trend": "neutral",
         "category": "Grains",
-        "imageUrl": "https://cdn-icons-png.flaticon.com/512/415/415733.png",
+        "imageUrl":
+            "https://images.rawpixel.com/image_png_social_landscape/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3Jhd3BpeGVsX29mZmljZV8yMV9waG90b19vZl9yaWNlX3NhY2tfd2l0aF9yaWNlX2Nyb3BfaXNvbGF0ZWRfb185ZmI0NTg5My1mMThiLTRjMTktOTU1NS1hZThkNjc5NzQyZTMucG5n.png",
         "markets": []
       },
     ];
