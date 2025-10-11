@@ -7,11 +7,18 @@ environment:
 
 dependencies:
 
+
+
+
+
   flutter:
     sdk: flutter
 
   # State management
   provider: ^6.0.5
+  flutter_local_notifications: ^17.1.0
+  
+
 
   # HTTP (for future REST integration)
   http: ^1.5.0
@@ -51,4 +58,5 @@ flutter:
   assets:
     - assets/lottie/onboarding.json
     - assets/mock_data/
+    - assets/mock_data/banners.json
   #   - assets/mock_data/products.json

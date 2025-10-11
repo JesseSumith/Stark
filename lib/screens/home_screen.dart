@@ -1,249 +1,214 @@
 import 'package:flutter/material.dart';
-import 'package:market_advisor/mock_data.dart';
-import 'package:provider/provider.dart';
-import '../models/product_model.dart';
-import '../widgets/auto_carousel.dart';
-import '../widgets/product_card.dart';
-import '../providers/locale_provider.dart';
-import 'main_screen.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Product>> _loader;
+  final PageController _controller = PageController(viewportFraction: 0.9);
+  int _currentPage = 0;
+  Timer? _timer;
+
+  final List<Map<String, String>> banners = [
+    {
+      'image':
+          'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1200&q=80',
+      'title': 'Know Market Prices',
+      'subtitle': 'Compare nearby mandis and choose the best deal.',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1200&q=80',
+      'title': 'Compare & Save',
+      'subtitle': 'Analyze transport cost and maximize your profit.',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=1200&q=80',
+      'title': 'Get Alerts & Advice',
+      'subtitle': 'Stay informed with smart notifications and insights.',
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
-    _loader = MockData.getProducts();
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_controller.hasClients) {
+        int next = _currentPage + 1;
+        if (next >= banners.length) next = 0;
+        _controller.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+
+    _controller.addListener(() {
+      int newPage = _controller.page!.round();
+      if (_currentPage != newPage) {
+        setState(() => _currentPage = newPage);
+      }
+    });
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    
-    return AppBar(
-      elevation: 2,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient:
-              LinearGradient(colors: [Color(0xFF6D4C41), Color(0xFF8BC34A)]),
-        ),
-      ),
-      title: const Text('Market Pulse'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.language),
-          onPressed: () {
-            final lp = context.read<LocaleProvider>();
-            final newLocale =
-                lp.locale == AppLocale.en ? AppLocale.te : AppLocale.en;
-            lp.switchTo(newLocale);
-          },
-        )
-      ],
-    );
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final locale = context.watch<LocaleProvider>();
-
     return Scaffold(
-      appBar: _buildAppBar(context),
+      backgroundColor: const Color(0xfff8f8f8),
       body: SafeArea(
-        child: FutureBuilder<List<Product>>(
-          future: _loader,
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snap.hasError) {
-              return Center(child: Text('Failed to load data: ${snap.error}'));
-            } else if (!snap.hasData || snap.data!.isEmpty) {
-              return const Center(child: Text('No products available.'));
-            } else {
-              final products = snap.data!;
-              final trending = List.of(products);
-              trending.sort((a, b) {
-                int score(String t) {
-                  if (t.toLowerCase() == 'up') return 2;
-                  if (t.toLowerCase() == 'neutral') return 1;
-                  return 0;
-                }
+        child: Column(
+          children: [
+            const SizedBox(height: 12),
 
-                return score(b.trend).compareTo(score(a.trend));
-              });
-              final top = trending.take(4).toList();
+            // 🟩 Animated Banner Section
+            SizedBox(
+              height: 240,
+              child: PageView.builder(
+                controller: _controller,
+                itemCount: banners.length,
+                itemBuilder: (context, index) {
+                  final banner = banners[index];
+                  final scale =
+                      _currentPage == index ? 1.0 : 0.9; // parallax feel
 
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(bottom: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 12),
-                    // Carousel
-                    Padding(
+                  return AnimatedScale(
+                    scale: scale,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: AutoCarousel(
-                        items: products
-                            .map((p) => ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    p.imageUrl,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) =>
-                                        Container(color: Colors.grey.shade300),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // TRENDING SECTION
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        height: 216,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Stack(
+                          fit: StackFit.expand,
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    locale.translate(
-                                      en: 'Trending Products',
-                                      te: 'ఇప్పటికే టాపు వస్తువులు',
-                                    ),
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const MainScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(locale.translate(
-                                      en: 'View all', te: 'అన్నిటిని చూడండి')),
-                                ),
-                              ],
+                            // Background Image
+                            ShaderMask(
+                              shaderCallback: (rect) => LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.2),
+                                  Colors.black.withOpacity(0.5),
+                                ],
+                              ).createShader(rect),
+                              blendMode: BlendMode.darken,
+                              child: Image.network(
+                                banner['image']!,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            const SizedBox(height: 8),
-                            Expanded(
-                              child: ListView.separated(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: top.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (context, idx) {
-                                  return SizedBox(
-                                    width: 140,
-                                    child: ProductCardCompact(
-                                      product: top[idx],
-                                      onTap: () {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                              content: Text(
-                                                  '${top[idx].name} tapped')),
-                                        );
-                                      },
+
+                            // Text Overlay
+                            Positioned(
+                              bottom: 20,
+                              left: 20,
+                              right: 20,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    banner['title']!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  );
-                                },
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    banner['subtitle']!,
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.9),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
+                  );
+                },
+              ),
+            ),
 
-                    const SizedBox(height: 20),
-
-                    // Advisory CTA
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 6,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 12,
-                            runSpacing: 8,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      locale.translate(
-                                        en: 'Need selling advice?',
-                                        te: 'అమ్మకానికి సలహా కావాలా?',
-                                      ),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      locale.translate(
-                                        en: 'Find the best place and time to sell your produce.',
-                                        te: 'మీ ఉత్పత్తిని అమ్మడానికి ఉత్తమ మార్కెట్ మరియు సమయం కనుగొనండి.',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const MainScreen()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6D4C41),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: Text(
-                                  locale.translate(
-                                    en: 'Get Advisory',
-                                    te: 'సలహా పొందండి',
-                                  ),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
+            // 🟡 Dots Indicator
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                banners.length,
+                (index) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  height: 8,
+                  width: _currentPage == index ? 20 : 8,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index
+                        ? Colors.green.shade600
+                        : Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
-              );
-            }
-          },
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Example Placeholder Content
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  Text(
+                    "Welcome back!",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "Here's the latest market insight and updates near you.",
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text("📊 Market Overview Coming Soon"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

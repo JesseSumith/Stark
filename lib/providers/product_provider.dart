@@ -25,7 +25,7 @@ class ProductProvider extends ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse('${AppConstants.baseUrl}products/'),
+        Uri.parse('${AppConstants.baseUrl}latest/'),
       );
 
       if (response.statusCode == 200) {
