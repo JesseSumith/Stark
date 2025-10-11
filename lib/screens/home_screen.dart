@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:market_advisor/mock_data.dart';
+import 'package:market_advisor/screens/advisory_screen.dart';
 import 'package:provider/provider.dart';
 import '../models/product_model.dart';
-import '../widgets/product_card.dart';
 import '../providers/locale_provider.dart';
 import 'main_screen.dart';
+import 'products_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -229,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const MainScreen()),
+                    MaterialPageRoute(builder: (_) => const ProductsScreen()),
                   );
                 },
                 child: Text(
@@ -419,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const MainScreen()),
+                      MaterialPageRoute(builder: (_) => const AdvisoryScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

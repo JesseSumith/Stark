@@ -121,7 +121,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
         child: Column(
           children: [
             DropdownButtonFormField<String>(
-              value: selectedProduct,
+              initialValue: selectedProduct,
               items: basePrices.keys
                   .map((product) => DropdownMenuItem(
                         value: product,

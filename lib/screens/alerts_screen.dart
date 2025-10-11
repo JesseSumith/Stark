@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../providers/product_provider.dart';
 import '../providers/locale_provider.dart';
 import '../main.dart' as main; // for notifications
-import 'price_alert_screen.dart';
 
 class AlertsScreen extends StatefulWidget {
   const AlertsScreen({super.key});
