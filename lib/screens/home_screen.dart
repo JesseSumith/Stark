@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-    final locale = context.watch<LocaleProvider>();
+    
     return AppBar(
       elevation: 2,
       flexibleSpace: Container(

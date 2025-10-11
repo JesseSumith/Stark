@@ -58,7 +58,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               itemCount: product.markets.length,
               itemBuilder: (context, idx) {
                 final m = product.markets[idx];
-                final profit = m.price - product.price; // simplistic
+                // simplistic
                 return Card(
                   child: ListTile(
                     title: Text(

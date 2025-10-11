@@ -20,8 +20,7 @@ class MarketAdvisorApp extends StatelessWidget {
     return OverlaySupport.global(
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-              create: (_) => ProductProvider()..loadMockProducts()),
+          ChangeNotifierProvider(create: (_) => ProductProvider()),
           ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ],
         child: Consumer<LocaleProvider>(
